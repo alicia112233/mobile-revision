@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INF2007 MAD Finals Revision</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface2: #1a1a24;
+            --border: #2a2a38;
+            --accent: #7c3aed;
+            --accent2: #a855f7;
+            --green: #10b981;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+            --blue: #3b82f6;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --code-bg: #0d1117;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* HEADER */
+        header {
+            position: relative;
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.2);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+            color: var(--accent2);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2px;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #e2e8f0 30%, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .topic-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .pill {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 0.25rem 0.7rem;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pill:hover,
+        .pill.active {
+            border-color: var(--accent);
+            color: var(--accent2);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        /* LAYOUT */
+        .main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* CONTROLS */
+        .controls {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+        }
+
+        select {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--accent);
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #6d28d9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent2);
+        }
+
+        /* PROGRESS BAR */
+        .progress-section {
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .progress-section.visible {
+            display: block;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .progress-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent2);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--surface2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 2px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        /* QUESTION CARD */
+        .quiz-container {
+            display: none;
+        }
+
+        .quiz-container.visible {
+            display: block;
+        }
+
+        .question-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+        }
+
+        .q-meta {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .q-type-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .badge-single {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .badge-multi {
+            background: rgba(168, 85, 247, 0.15);
+            color: #d8b4fe;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .badge-tf {
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .q-topic {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .q-text strong {
+            color: var(--accent2);
+        }
+
+        /* CODE BLOCK */
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid #21262d;
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin: 1rem 0 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'KOTLIN';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            font-size: 0.65rem;
+            color: #484f58;
+            letter-spacing: 0.05em;
+        }
+
+        .kw {
+            color: #ff7b72;
+        }
+
+        .fn {
+            color: #d2a8ff;
+        }
+
+        .an {
+            color: #ffa657;
+        }
+
+        .str {
+            color: #a5d6ff;
+        }
+
+        .cm {
+            color: #484f58;
+            font-style: italic;
+        }
+
+        .tp {
+            color: #7ee787;
+        }
+
+        .num {
+            color: #79c0ff;
+        }
+
+        /* OPTIONS */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.85rem;
+            padding: 0.85rem 1.1rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: var(--surface2);
+            user-select: none;
+        }
+
+        .option:hover:not(.locked) {
+            border-color: var(--accent);
+            background: rgba(124, 58, 237, 0.07);
+        }
+
+        .option.selected {
+            border-color: var(--accent);
+            background: rgba(124, 58, 237, 0.12);
+        }
+
+        .option.correct {
+            border-color: var(--green);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .option.wrong {
+            border-color: var(--red);
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .option.missed {
+            border-color: var(--yellow);
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .option-letter {
+            min-width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--muted);
+            transition: all 0.15s;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .option.selected .option-letter {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .option.correct .option-letter {
+            background: var(--green);
+            border-color: var(--green);
+            color: white;
+        }
+
+        .option.wrong .option-letter {
+            background: var(--red);
+            border-color: var(--red);
+            color: white;
+        }
+
+        .option.missed .option-letter {
+            background: var(--yellow);
+            border-color: var(--yellow);
+            color: #0a0a0f;
+        }
+
+        .option-text {
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        /* MULTI SELECT HINT */
+        .multi-hint {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* SUBMIT / NEXT */
+        .q-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* EXPLANATION */
+        .explanation {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: 10px;
+            padding: 1.1rem 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation.visible {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .explanation strong {
+            color: var(--accent2);
+        }
+
+        /* SCORE CARD */
+        .score-card {
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            animation: slideIn 0.4s ease;
+        }
+
+        .score-card.visible {
+            display: block;
+        }
+
+        .score-emoji {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .score-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 5rem;
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-label {
+            color: var(--muted);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .score-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .score-stat {
+            text-align: center;
+        }
+
+        .score-stat .stat-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .score-stat .stat-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .correct-stat .stat-num {
+            color: var(--green);
+        }
+
+        .wrong-stat .stat-num {
+            color: var(--red);
+        }
+
+        .skip-stat .stat-num {
+            color: var(--yellow);
+        }
+
+        /* LOADING SPINNER */
+        .loading-state {
+            display: none;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .loading-state.visible {
+            display: block;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--surface2);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+
+            0%,
+            20% {
+                content: '';
+            }
+
+            40% {
+                content: '.';
+            }
+
+            60% {
+                content: '..';
+            }
+
+            80%,
+            100% {
+                content: '...';
+            }
+        }
+
+        /* ERROR */
+        .error-state {
+            display: none;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            color: #fca5a5;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-state.visible {
+            display: block;
+        }
+
+        /* TOPIC SELECTOR GRID */
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .topic-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .topic-card.selected {
+            border-color: var(--accent);
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .topic-card .topic-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .topic-card .topic-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.2rem;
+        }
+
+        .topic-card .topic-week {
+            font-size: 0.7rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* TIMER */
+        .timer-bar {
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .timer-bar.visible {
+            display: flex;
+        }
+
+        .timer-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent2);
+            min-width: 90px;
+            transition: color 0.3s;
+        }
+
+        .timer-display.warning {
+            color: var(--yellow);
+        }
+
+        .timer-display.danger {
+            color: var(--red);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .timer-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .timer-track {
+            flex: 1;
+            height: 4px;
+            background: var(--surface2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 2px;
+            transition: width 1s linear, background 0.5s;
+            width: 100%;
+        }
+
+        .timer-fill.warning {
+            background: linear-gradient(90deg, var(--yellow), #fbbf24);
+        }
+
+        .timer-fill.danger {
+            background: linear-gradient(90deg, var(--red), #f87171);
+        }
+
+        .timer-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        /* SECTION DIVIDER */
+        .section-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* CHEATSHEET SECTION */
+        .cheatsheet {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cheatsheet summary {
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .cheatsheet summary::before {
+            content: '▶';
+            font-size: 0.65rem;
+            color: var(--accent);
+            transition: transform 0.2s;
+        }
+
+        .cheatsheet[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .cheatsheet-content {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .cheat-item {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .cheat-item .cheat-key {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent2);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .cheat-item .cheat-val {
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 640px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .topic-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .score-num {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="badge">INF2007 · MAD · FINALS PREP</div>
+        <h1>Mobile App Dev<br>Revision Quiz</h1>
+        <p class="subtitle">Weeks 8–11 · Architecture · Hilt · Coroutines · Services · Broadcast Receivers</p>
+        <div class="topic-pills">
+            <span class="pill">ViewModel</span>
+            <span class="pill">Room/DAO</span>
+            <span class="pill">Repository</span>
+            <span class="pill">DataStore</span>
+            <span class="pill">StateFlow</span>
+            <span class="pill">Hilt/DI</span>
+            <span class="pill">Retrofit</span>
+            <span class="pill">Coroutines</span>
+            <span class="pill">Flow</span>
+            <span class="pill">Services</span>
+            <span class="pill">WorkManager</span>
+            <span class="pill">BroadcastReceiver</span>
+        </div>
+    </header>
+
+    <div class="main">
+
+        <!-- QUICK REFERENCE -->
+        <details class="cheatsheet">
+            <summary>📋 Quick Reference Cheatsheet</summary>
+            <div class="cheatsheet-content" id="cheatsheetGrid"></div>
+        </details>
+
+        <!-- CONTROLS -->
+        <div class="section-title">Quiz Settings</div>
+        <div class="controls">
+            <div class="control-group">
+                <label>Topic</label>
+                <select id="topicSelect">
+                    <option value="mixed">All Topics (Mixed)</option>
+                    <option value="architecture">Wk8 · Architecture & ViewModel</option>
+                    <option value="room">Wk8 · Room & DAO</option>
+                    <option value="datastore">Wk8 · DataStore & LiveData</option>
+                    <option value="hilt">Wk9 · Hilt & DI</option>
+                    <option value="retrofit">Wk9 · Retrofit & OkHttp</option>
+                    <option value="coroutines">Wk9-10 · Coroutines</option>
+                    <option value="flow">Wk10 · Flow & StateFlow</option>
+                    <option value="services">Wk11 · Services & WorkManager</option>
+                    <option value="broadcast">Wk11 · Broadcast Receivers</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Question Count</label>
+                <select id="countSelect">
+                    <option value="5">5 questions (quick)</option>
+                    <option value="10" selected>10 questions</option>
+                    <option value="20">20 questions</option>
+                    <option value="30">30 questions</option>
+                    <option value="50">50 questions (full mock)</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" id="startBtn" onclick="startQuiz()">
+                <span>Generate Quiz</span> →
+            </button>
+        </div>
+
+        <!-- ERROR -->
+        <div class="error-state" id="errorState"></div>
+
+        <!-- LOADING -->
+        <div class="loading-state" id="loadingState">
+            <div class="spinner"></div>
+            <div class="loading-text">Professor AI is setting your paper<span class="loading-dots"></span></div>
+            <div style="margin-top:0.5rem;font-size:0.75rem;color:var(--muted);font-family:JetBrains Mono,monospace"
+                id="loadingHint"></div>
+        </div>
+
+        <!-- TIMER -->
+        <div class="timer-bar" id="timerBar">
+            <div>
+                <div class="timer-label">TIME REMAINING</div>
+                <div class="timer-display" id="timerDisplay">60:00</div>
+            </div>
+            <div class="timer-track" style="flex:1">
+                <div class="timer-fill" id="timerFill"></div>
+            </div>
+            <div class="timer-right">
+                <span class="timer-label" id="timerAlloc"></span>
+            </div>
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="progress-section" id="progressSection">
+            <div class="progress-header">
+                <span class="progress-label" id="progressLabel">Question 1 of 10</span>
+                <span class="progress-count" id="scoreTracker">0 / 0</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- QUIZ CONTAINER -->
+        <div class="quiz-container" id="quizContainer"></div>
+
+        <!-- SCORE CARD -->
+        <div class="score-card" id="scoreCard">
+            <div class="score-emoji" id="scoreEmoji">🎓</div>
+            <div class="score-num" id="finalScore">—</div>
+            <div class="score-label" id="scoreLabel">Loading...</div>
+            <div class="score-breakdown">
+                <div class="score-stat correct-stat">
+                    <span class="stat-num" id="correctCount">0</span>
+                    <span class="stat-label">Correct</span>
+                </div>
+                <div class="score-stat wrong-stat">
+                    <span class="stat-num" id="wrongCount">0</span>
+                    <span class="stat-label">Wrong</span>
+                </div>
+            </div>
+            <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="startQuiz()">Try Again</button>
+                <button class="btn btn-outline" onclick="reviewAnswers()">Review Answers</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // =============================================
+        // DATA & STATE
+        // =============================================
+        let questions = [];
+        let currentQ = 0;
+        let score = 0;
+        let wrongAns = 0;
+        let userAnswers = [];
+        let quizMode = 'active';
+        let timerInterval = null;
+        let timerSecondsLeft = 0;
+        let timerTotal = 0;
+
+        // 50 questions = 3600s, pro-rated linearly
+        function getAllocatedSeconds(count) { return Math.round((count / 50) * 3600); }
+
+        function startTimer(count) {
+            clearInterval(timerInterval);
+            timerSecondsLeft = getAllocatedSeconds(count);
+            timerTotal = timerSecondsLeft;
+            const bar = document.getElementById('timerBar');
+            bar.classList.add('visible');
+            document.getElementById('timerAlloc').textContent = `${count} questions`;
+            updateTimerUI();
+            timerInterval = setInterval(() => {
+                timerSecondsLeft--;
+                updateTimerUI();
+                if (timerSecondsLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() { clearInterval(timerInterval); }
+
+        function updateTimerUI() {
+            const m = String(Math.floor(timerSecondsLeft / 60)).padStart(2, '0');
+            const s = String(timerSecondsLeft % 60).padStart(2, '0');
+            const disp = document.getElementById('timerDisplay');
+            const fill = document.getElementById('timerFill');
+            if (!disp) return;
+            disp.textContent = `${m}:${s}`;
+            const pct = (timerSecondsLeft / timerTotal) * 100;
+            fill.style.width = pct + '%';
+            const isWarn = pct <= 30 && pct > 10;
+            const isDanger = pct <= 10;
+            disp.className = 'timer-display' + (isDanger ? ' danger' : isWarn ? ' warning' : '');
+            fill.className = 'timer-fill' + (isDanger ? ' danger' : isWarn ? ' warning' : '');
+        }
+
+        function timeUp() {
+            document.getElementById('timerDisplay').textContent = '00:00';
+            // Auto-submit current unanswered, then show score
+            if (currentQ < questions.length && (!userAnswers[currentQ])) {
+                userAnswers[currentQ] = { selected: [], correct: questions[currentQ].correct, isCorrect: false };
+            }
+            showScore(true);
+        }
+
+        const TOPICS = {
+            architecture: 'Architecture & ViewModel',
+            room: 'Room & DAO',
+            datastore: 'DataStore & LiveData',
+            hilt: 'Hilt & DI',
+            retrofit: 'Retrofit & OkHttp',
+            coroutines: 'Coroutines',
+            flow: 'Flow & StateFlow',
+            services: 'Services & WorkManager',
+            broadcast: 'Broadcast Receivers'
+        };
+
+        const CHEATSHEET = [
+            { key: 'ViewModel', val: 'Survives config changes. Holds UI state. Part of Jetpack. Created via viewModel().' },
+            { key: 'UDF (Unidirectional Data Flow)', val: 'Events flow UP (UI→VM), State flows DOWN (VM→UI).' },
+            { key: '@Entity', val: 'Data class annotated for Room table. 1 instance = 1 row.' },
+            { key: '@Dao', val: 'Interface with @Insert/@Update/@Delete/@Query methods. Must be interface/abstract class.' },
+            { key: '@Database', val: 'Abstract class extending RoomDatabase. Singleton. Declares entities + version.' },
+            { key: 'Repository', val: 'Best practice (not Jetpack). Single source of truth for data. Sits between VM and DAO.' },
+            { key: 'DataStore', val: 'Replaces SharedPreferences. Preferences (key-value) or Proto (typed). Built on coroutines/Flow.' },
+            { key: 'StateFlow vs LiveData', val: 'StateFlow needs initial state; LiveData does not. StateFlow requires repeatOnLifecycle to auto-stop.' },
+            { key: 'Hilt @HiltAndroidApp', val: 'On Application class. Required for Hilt to work.' },
+            { key: 'Hilt @AndroidEntryPoint', val: 'On Activity/Fragment. Enables field injection.' },
+            { key: '@HiltViewModel + hiltViewModel()', val: 'For ViewModel DI. Use hiltViewModel() in composables.' },
+            { key: '@Singleton', val: 'Same instance throughout app lifecycle. Applied to @Provides method.' },
+            { key: 'Retrofit', val: 'REST client by Square. Uses OkHttp. Add @GET/@POST etc. to interface methods.' },
+            { key: 'suspend fun', val: 'Can be paused and resumed. Can only be called from coroutine or another suspend fun.' },
+            { key: 'launch{}', val: 'Fire-and-forget coroutine builder. Returns Job.' },
+            { key: 'async{}', val: 'Returns Deferred. Use .await() to get result.' },
+            { key: 'Dispatchers.Main', val: 'UI thread only. For updating LiveData, UI ops.' },
+            { key: 'Dispatchers.IO', val: 'Disk/network ops. Room, file I/O, network calls.' },
+            { key: 'Dispatchers.Default', val: 'CPU-intensive. Sorting, JSON parsing.' },
+            { key: 'withContext()', val: 'Switch dispatcher without creating new coroutine. Suspending.' },
+            { key: 'SupervisorJob', val: 'Child failure does NOT cancel parent or siblings.' },
+            { key: 'viewModelScope', val: 'Auto-cancelled when ViewModel cleared.' },
+            { key: 'lifecycleScope', val: 'Auto-cancelled when Lifecycle destroyed.' },
+            { key: 'Cold Flow', val: 'Starts only when collected. One subscriber = one execution.' },
+            { key: 'Hot Flow (SharedFlow/StateFlow)', val: 'Emits regardless of subscribers. StateFlow = latest value only.' },
+            { key: 'flatMapLatest', val: 'Cancels previous flow when new value emitted. Use for search inputs.' },
+            { key: 'LaunchedEffect', val: 'Coroutine inside composable. Runs on composition, cancelled on leave.' },
+            { key: 'rememberCoroutineScope()', val: 'Coroutine scope outside composable lambda (e.g. onClick). Cancelled on leave.' },
+            { key: 'Services (Started)', val: 'startService() → onCreate() → onStartCommand() → stopSelf() → onDestroy().' },
+            { key: 'Services (Bound)', val: 'bindService() → onBind() returns IBinder → onUnbind() → onDestroy().' },
+            { key: 'WorkManager', val: 'Persistent background work. Survives reboots. OneTimeWorkRequest / PeriodicWorkRequest.' },
+            { key: 'BroadcastReceiver', val: 'Static (Manifest, always on) or Dynamic (code, only when app running). Prefer Dynamic.' },
+        ];
+
+        function initCheatsheet() {
+            const grid = document.getElementById('cheatsheetGrid');
+            grid.innerHTML = CHEATSHEET.map(c => `
+    <div class="cheat-item">
+      <div class="cheat-key">${c.key}</div>
+      <div class="cheat-val">${c.val}</div>
+    </div>
+  `).join('');
+        }
+
+        // =============================================
+        // AI QUESTION GENERATION
+        // =============================================
+        const QUIZ_PROXY_URL = 'http://localhost:8787/api/generate-questions';
+        const ANTHROPIC_MODEL = 'claude-sonnet-4-20250514';
+
+        const LOCAL_QUESTION_POOL = [
+            {
+                type: 'SINGLE', topic: 'Architecture & ViewModel',
+                question: 'In MVVM with Jetpack Compose, where should business logic and long-running data calls live?',
+                code: null,
+                options: ['Composable functions', 'ViewModel', 'XML layout files', 'Navigation graph'],
+                correct: [1],
+                explanation: 'Business logic belongs in the ViewModel to keep UI composables stateless and testable. Composables should primarily render state and emit events.'
+            },
+            {
+                type: 'MULTI', topic: 'Room & DAO',
+                question: 'Which statements about Room are correct?',
+                code: null,
+                options: ['DAO methods can be annotated with @Query', '@Entity defines a table schema', '@Database class must extend SQLiteOpenHelper directly', 'Room supports suspend DAO calls'],
+                correct: [0, 1, 3],
+                explanation: 'DAO uses Room annotations; @Entity maps to tables; suspend DAO methods are common with coroutines. @Database extends RoomDatabase, not SQLiteOpenHelper directly.'
+            },
+            {
+                type: 'SINGLE', topic: 'DataStore & LiveData',
+                question: 'What is a key advantage of DataStore over SharedPreferences?',
+                code: null,
+                options: ['Works only on main thread', 'Built on coroutines and Flow', 'Requires no context', 'Stores binary media efficiently'],
+                correct: [1],
+                explanation: 'DataStore is asynchronous and coroutine-based, exposing data as Flow for safer and modern state handling.'
+            },
+            {
+                type: 'TF', topic: 'Hilt & DI',
+                question: '@HiltAndroidApp should be applied to the Application class.',
+                code: null,
+                options: ['True', 'False'],
+                correct: [0],
+                explanation: 'True. Hilt generates the application-level dependency container from the Application class.'
+            },
+            {
+                type: 'SINGLE', topic: 'Retrofit & OkHttp',
+                question: 'Which annotation is typically used for a simple HTTP GET endpoint in Retrofit?',
+                code: null,
+                options: ['@Insert', '@GET', '@Provides', '@Inject'],
+                correct: [1],
+                explanation: '@GET is the Retrofit HTTP method annotation for GET requests.'
+            },
+            {
+                type: 'SINGLE', topic: 'Coroutines',
+                question: 'What does withContext(Dispatchers.IO) primarily do?',
+                code: 'suspend fun loadData() {\n    withContext(Dispatchers.IO) {\n        // disk/network work\n    }\n}',
+                options: ['Launches a new app process', 'Switches coroutine context for the enclosed block', 'Cancels parent scope', 'Blocks the UI thread'],
+                correct: [1],
+                explanation: 'withContext changes dispatcher/context for a suspend block and then returns to previous context.'
+            },
+            {
+                type: 'MULTI', topic: 'Flow & StateFlow',
+                question: 'Select valid differences between StateFlow and cold Flow.',
+                code: null,
+                options: ['StateFlow always has a current value', 'Cold Flow starts on collection', 'StateFlow never replays latest value', 'Cold Flow emits without collectors by default'],
+                correct: [0, 1],
+                explanation: 'StateFlow requires an initial/current value. Cold Flow does not run until collected. StateFlow does replay latest state to new collectors.'
+            },
+            {
+                type: 'SINGLE', topic: 'Services & WorkManager',
+                question: 'Which is best for guaranteed deferrable background work that should survive app restarts?',
+                code: null,
+                options: ['Activity lifecycle callbacks', 'WorkManager', 'BroadcastReceiver only', 'Thread.sleep in MainActivity'],
+                correct: [1],
+                explanation: 'WorkManager is designed for deferrable, guaranteed background tasks with OS-aware scheduling.'
+            },
+            {
+                type: 'TF', topic: 'Broadcast Receivers',
+                question: 'A dynamically registered BroadcastReceiver is active only while its registration owner is alive.',
+                code: null,
+                options: ['True', 'False'],
+                correct: [0],
+                explanation: 'True. Dynamic receivers are tied to runtime registration and typically lifecycle scope.'
+            },
+            {
+                type: 'SINGLE', topic: 'Coroutines',
+                question: 'Which coroutine builder returns a Deferred result?',
+                code: null,
+                options: ['launch', 'runBlocking', 'async', 'withContext'],
+                correct: [2],
+                explanation: 'async returns Deferred<T>, which can be awaited. launch returns Job.'
+            },
+            {
+                type: 'SINGLE', topic: 'Architecture & ViewModel',
+                question: 'In unidirectional data flow, what usually flows from ViewModel to UI?',
+                code: null,
+                options: ['Navigation XML', 'State', 'Gradle dependencies', 'DAO migrations'],
+                correct: [1],
+                explanation: 'UDF pattern: UI sends events upward; ViewModel exposes state downward.'
+            },
+            {
+                type: 'MULTI', topic: 'Hilt & DI',
+                question: 'Which annotations are directly involved in Hilt object provisioning/injection setup?',
+                code: null,
+                options: ['@Module', '@Provides', '@AndroidEntryPoint', '@Composable'],
+                correct: [0, 1, 2],
+                explanation: '@Module and @Provides define bindings, while @AndroidEntryPoint enables injection targets. @Composable is unrelated to DI setup.'
+            },
+            {
+                type: 'SINGLE', topic: 'Room & DAO',
+                question: 'Why is a repository commonly introduced between ViewModel and DAO?',
+                code: null,
+                options: ['To replace Room entirely', 'To centralize data sources and business rules', 'To avoid using suspend functions', 'To generate XML views'],
+                correct: [1],
+                explanation: 'Repository centralizes data orchestration (local/remote/cache), improving separation of concerns and testability.'
+            },
+            {
+                type: 'TF', topic: 'Flow & StateFlow',
+                question: 'flatMapLatest cancels previous inner flow when a new upstream value arrives.',
+                code: null,
+                options: ['True', 'False'],
+                correct: [0],
+                explanation: 'True. That is the key behavior of flatMapLatest and why it is useful in search/autocomplete pipelines.'
+            },
+            {
+                type: 'SINGLE', topic: 'Services & WorkManager',
+                question: 'What is required for a long-running user-visible task in the background on modern Android?',
+                code: null,
+                options: ['Foreground service notification', 'Only a coroutine scope', 'An @Entity class', 'A BroadcastReceiver callback'],
+                correct: [0],
+                explanation: 'Long-running user-visible background tasks generally require a foreground service with an ongoing notification.'
+            }
+        ];
+
+        const SYSTEM_PROMPT = `You are a strict university professor for INF2007 Mobile Application Development at SIT, Singapore. You are setting a finals MCQ quiz paper.
+
+Topics: Android Architecture (MVVM, ViewModel, UDF), Room (Entity, DAO, Database, Relationships), Repository pattern, DataStore (Preferences vs Proto), LiveData vs StateFlow, Dependency Injection with Hilt (@HiltAndroidApp, @AndroidEntryPoint, @HiltViewModel, @Module, @Provides, @Singleton, @Qualifier), Retrofit (REST client, annotations), Android Threading (HandlerThread, Looper/Handler, Executors), Coroutines (launch, async, suspend, Dispatchers, withContext, structured concurrency, SupervisorJob, viewModelScope, lifecycleScope, cancellation), Flow (cold vs hot, SharedFlow, StateFlow, flatMapLatest, operators), Side effects (LaunchedEffect, rememberCoroutineScope, SideEffect, DisposableEffect), Android Services (started vs bound, foreground, PendingIntent), WorkManager, Broadcast Receivers (static vs dynamic, system broadcasts, permissions), Content Providers.
+
+Generate EXACTLY {COUNT} MCQ questions for the topic: {TOPIC}.
+
+Rules:
+- Mix of: single-select (label: "SINGLE"), multi-select (label: "MULTI" - exactly 2-3 correct answers), and true/false (label: "TF" - options are exactly ["True","False"])
+- 60% should be scenario-based with Kotlin code snippets
+- Code snippets must be realistic and compilable Kotlin/Android code
+- Questions should vary: some easy (definition), most medium (code reading), some hard (tricky edge cases)
+- Explanations must be detailed and educational
+
+Return ONLY valid JSON array, no markdown, no preamble:
+[
+  {
+    "id": 1,
+    "type": "SINGLE" | "MULTI" | "TF",
+    "topic": "short topic name",
+    "question": "question text (use \\n for line breaks if needed)",
+    "code": "kotlin code snippet OR null if no code needed",
+    "options": ["A", "B", "C", "D"] (for TF: ["True", "False"]),
+    "correct": [0] for single (0-indexed array), [0,2] for multi, [0] or [1] for TF,
+    "explanation": "detailed explanation of WHY the answer(s) are correct and WHY others are wrong"
+  }
+]`;
+
+        function shuffle(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function mapTopicToLabel(topicKey) {
+            if (topicKey === 'mixed') return null;
+            return TOPICS[topicKey] || null;
+        }
+
+        function generateLocalQuestions(topic, count) {
+            const topicLabel = mapTopicToLabel(topic);
+            const source = topicLabel
+                ? LOCAL_QUESTION_POOL.filter(q => q.topic === topicLabel)
+                : LOCAL_QUESTION_POOL;
+            const basePool = source.length ? source : LOCAL_QUESTION_POOL;
+
+            const out = [];
+            let round = 0;
+
+            while (out.length < count) {
+                const shuffled = shuffle(basePool);
+                shuffled.forEach((q, idx) => {
+                    if (out.length >= count) return;
+                    const clone = {
+                        ...q,
+                        id: out.length + 1,
+                        question: round === 0 ? q.question : `${q.question} (Variant ${round + 1})`
+                    };
+                    out.push(clone);
+                });
+                round++;
+            }
+
+            return out;
+        }
+
+        async function fetchBatchWithRetry(topicLabel, batchSize, batchNum, totalBatches, retries = 2) {
+            let lastError = null;
+            for (let attempt = 1; attempt <= retries + 1; attempt++) {
+                try {
+                    return await fetchBatch(topicLabel, batchSize, batchNum, totalBatches);
+                } catch (err) {
+                    lastError = err;
+                    await new Promise(r => setTimeout(r, 500 * attempt));
+                }
+            }
+            throw lastError || new Error('Unknown batch failure');
+        }
+
+        async function fetchBatch(topicLabel, batchSize, batchNum, totalBatches) {
+            const prompt = SYSTEM_PROMPT
+                .replace('{COUNT}', batchSize)
+                .replace('{TOPIC}', topicLabel);
+
+            const response = await fetch(QUIZ_PROXY_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: ANTHROPIC_MODEL,
+                    maxTokens: 4000,
+                    systemPrompt: prompt,
+                    userPrompt: `Generate exactly ${batchSize} MCQ questions about ${topicLabel}. This is batch ${batchNum} of ${totalBatches} — make sure questions are DIFFERENT from previous batches. Return ONLY the JSON array, no other text.`
+                })
+            });
+
+            if (!response.ok) throw new Error(`API error: ${response.status}`);
+            const data = await response.json();
+
+            let text = data.content?.map(b => b.type === 'text' ? b.text : '').join('') || '';
+            text = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+            const match = text.match(/\[[\s\S]*\]/);
+            if (!match) throw new Error(`Could not parse batch ${batchNum} from AI response`);
+            return JSON.parse(match[0]);
+        }
+
+        async function callClaude(topic, count) {
+            const topicLabel = topic === 'mixed'
+                ? 'ALL topics mixed together (Architecture, Room, DataStore, Hilt, Retrofit, Coroutines, Flow, Services, Broadcast Receivers)'
+                : TOPICS[topic] || topic;
+            try {
+                const BATCH_SIZE = 10;
+                const batches = Math.ceil(count / BATCH_SIZE);
+                const hintEl = document.getElementById('loadingHint');
+
+                // Sequential loading is slower but much more reliable for larger sets like 50 questions.
+                if (hintEl) hintEl.textContent = `Connecting local AI proxy...`;
+                const results = [];
+                for (let i = 0; i < batches; i++) {
+                    const batchCount = Math.min(BATCH_SIZE, count - i * BATCH_SIZE);
+                    if (hintEl) hintEl.textContent = `Loading batch ${i + 1}/${batches}...`;
+                    const batch = await fetchBatchWithRetry(topicLabel, batchCount, i + 1, batches);
+                    results.push(batch);
+                    if (hintEl) {
+                        const loaded = Math.min((i + 1) * BATCH_SIZE, count);
+                        hintEl.textContent = `${i + 1}/${batches} batches done · ${loaded} questions ready...`;
+                    }
+                }
+
+                // Flatten + re-index
+                let all = results.flat();
+                all.forEach((q, i) => { q.id = i + 1; });
+                if (all.length < count) {
+                    const fallbackNeeded = count - all.length;
+                    all = all.concat(generateLocalQuestions(topic, fallbackNeeded));
+                    all.forEach((q, i) => { q.id = i + 1; });
+                }
+                return all.slice(0, count);
+            } catch (e) {
+                const hintEl = document.getElementById('loadingHint');
+                if (hintEl) hintEl.textContent = 'Remote generation unavailable. Switching to offline question bank...';
+                return generateLocalQuestions(topic, count);
+            }
+        }
+
+        // =============================================
+        // QUIZ LOGIC
+        // =============================================
+        async function startQuiz() {
+            const topic = document.getElementById('topicSelect').value;
+            const count = parseInt(document.getElementById('countSelect').value);
+
+            // Reset state
+            questions = [];
+            currentQ = 0;
+            score = 0;
+            wrongAns = 0;
+            userAnswers = [];
+            quizMode = 'active';
+
+            // UI state
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('quizContainer').classList.remove('visible');
+            document.getElementById('scoreCard').classList.remove('visible');
+            document.getElementById('progressSection').classList.remove('visible');
+            document.getElementById('errorState').classList.remove('visible');
+
+            const loading = document.getElementById('loadingState');
+            loading.classList.add('visible');
+
+            document.getElementById('loadingHint').textContent = 'Analysing lecture slides...';
+
+            try {
+                questions = await callClaude(topic, count);
+                loading.classList.remove('visible');
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('timerBar').classList.remove('visible');
+                startTimer(count);
+                renderQuestion(0);
+            } catch (e) {
+                loading.classList.remove('visible');
+                document.getElementById('startBtn').disabled = false;
+                const errEl = document.getElementById('errorState');
+                errEl.textContent = `⚠ Failed to generate questions: ${e.message}. Please try again.`;
+                errEl.classList.add('visible');
+            }
+        }
+
+        function renderQuestion(idx) {
+            if (idx >= questions.length) {
+                showScore();
+                return;
+            }
+
+            const q = questions[idx];
+            const container = document.getElementById('quizContainer');
+
+            // Progress
+            const prog = document.getElementById('progressSection');
+            prog.classList.add('visible');
+            document.getElementById('progressLabel').textContent = `Question ${idx + 1} of ${questions.length}`;
+            document.getElementById('scoreTracker').textContent = `${score} correct`;
+            const pct = ((idx) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = pct + '%';
+
+            const typeBadge = {
+                'SINGLE': '<span class="q-type-badge badge-single">Single Select</span>',
+                'MULTI': '<span class="q-type-badge badge-multi">Multi Select</span>',
+                'TF': '<span class="q-type-badge badge-tf">True / False</span>'
+            }[q.type] || '';
+
+            const codeHtml = q.code ? `<div class="code-block">${highlightKotlin(q.code)}</div>` : '';
+            const multiHint = q.type === 'MULTI'
+                ? `<div class="multi-hint">☑ Select all that apply — multiple correct answers</div>` : '';
+
+            const letters = ['A', 'B', 'C', 'D', 'E'];
+            const optionsHtml = q.options.map((opt, i) => `
+    <div class="option" id="opt-${idx}-${i}" onclick="toggleOption(${idx}, ${i})" data-idx="${i}">
+      <div class="option-letter">${q.type === 'TF' ? (i === 0 ? 'T' : 'F') : letters[i]}</div>
+      <div class="option-text">${opt}</div>
+    </div>
+  `).join('');
+
+            container.innerHTML = `
+    <div class="question-card" id="qcard-${idx}">
+      <div class="q-meta">
+        ${typeBadge}
+        <span class="q-topic">${q.topic || ''}</span>
+      </div>
+      <div class="q-text">${q.question.replace(/\n/g, '<br>')}</div>
+      ${codeHtml}
+      ${multiHint}
+      <div class="options" id="options-${idx}">
+        ${optionsHtml}
+      </div>
+      <div class="q-actions">
+        <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer(${idx})" disabled>Submit Answer</button>
+        <button class="btn btn-outline" onclick="skipQuestion(${idx})">Skip →</button>
+      </div>
+      <div class="explanation" id="explanation-${idx}"></div>
+    </div>
+  `;
+
+            container.classList.add('visible');
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Track selections for this question
+            window._selected = [];
+        }
+
+        function toggleOption(qIdx, optIdx) {
+            const q = questions[qIdx];
+            if (!window._selected) window._selected = [];
+
+            const el = document.getElementById(`opt-${qIdx}-${optIdx}`);
+            const locked = el.classList.contains('locked');
+            if (locked) return;
+
+            if (q.type === 'MULTI') {
+                const pos = window._selected.indexOf(optIdx);
+                if (pos === -1) {
+                    window._selected.push(optIdx);
+                    el.classList.add('selected');
+                } else {
+                    window._selected.splice(pos, 1);
+                    el.classList.remove('selected');
+                }
+            } else {
+                // Single / TF — only one
+                const prev = window._selected[0];
+                if (prev !== undefined) {
+                    document.getElementById(`opt-${qIdx}-${prev}`)?.classList.remove('selected');
+                }
+                window._selected = [optIdx];
+                el.classList.add('selected');
+            }
+
+            document.getElementById('submitBtn').disabled = window._selected.length === 0;
+        }
+
+        function submitAnswer(qIdx) {
+            const q = questions[qIdx];
+            const selected = [...window._selected].sort();
+            const correct = [...q.correct].sort();
+
+            const isCorrect = JSON.stringify(selected) === JSON.stringify(correct);
+
+            // Lock all options
+            const opts = document.querySelectorAll(`#options-${qIdx} .option`);
+            opts.forEach(o => o.classList.add('locked'));
+
+            // Highlight answers
+            q.options.forEach((_, i) => {
+                const el = document.getElementById(`opt-${qIdx}-${i}`);
+                const isCorrectOpt = correct.includes(i);
+                const isSelectedOpt = selected.includes(i);
+
+                if (isCorrectOpt && isSelectedOpt) el.classList.add('correct');
+                else if (isCorrectOpt && !isSelectedOpt) el.classList.add('missed');
+                else if (!isCorrectOpt && isSelectedOpt) el.classList.add('wrong');
+                el.classList.remove('selected');
+            });
+
+            if (isCorrect) score++;
+            else wrongAns++;
+
+            userAnswers[qIdx] = { selected, correct, isCorrect };
+
+            // Show explanation
+            const expEl = document.getElementById(`explanation-${qIdx}`);
+            expEl.innerHTML = `<strong>${isCorrect ? '✓ Correct!' : '✗ Incorrect.'}</strong> ${q.explanation}`;
+            expEl.classList.add('visible');
+
+            // Replace submit btn with Next
+            document.getElementById('submitBtn').outerHTML = `<button class="btn btn-primary" onclick="nextQuestion()">Next Question →</button>`;
+            document.getElementById('scoreTracker').textContent = `${score} correct`;
+        }
+
+        function skipQuestion(qIdx) {
+            userAnswers[qIdx] = { selected: [], correct: questions[qIdx].correct, isCorrect: false };
+            wrongAns++;
+            currentQ++;
+            renderQuestion(currentQ);
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            renderQuestion(currentQ);
+        }
+
+        function showScore(timedOut = false) {
+            stopTimer();
+            document.getElementById('timerBar').classList.remove('visible');
+            document.getElementById('quizContainer').classList.remove('visible');
+            document.getElementById('progressSection').classList.remove('visible');
+
+            const total = questions.length;
+            const pct = Math.round((score / total) * 100);
+
+            let emoji = '😬';
+            let label = '';
+            if (pct >= 90) { emoji = '🏆'; label = 'Outstanding! Distinction level.'; }
+            else if (pct >= 75) { emoji = '🎓'; label = 'Great work! Merit level.'; }
+            else if (pct >= 60) { emoji = '👍'; label = 'Pass. Review your weak areas.'; }
+            else if (pct >= 40) { emoji = '📚'; label = 'Needs more study. Revise the slides!'; }
+            else { emoji = '😬'; label = 'Uh oh. Time for a full revision session!'; }
+
+            document.getElementById('scoreEmoji').textContent = emoji;
+            document.getElementById('finalScore').textContent = `${pct}%`;
+            document.getElementById('scoreLabel').textContent = `${score} / ${total} correct · ${timedOut ? '⏰ Time\'s up! ' : ''}${label}`;
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('wrongCount').textContent = wrongAns;
+
+            document.getElementById('scoreCard').classList.add('visible');
+            document.getElementById('scoreCard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function reviewAnswers() {
+            document.getElementById('scoreCard').classList.remove('visible');
+            const container = document.getElementById('quizContainer');
+            container.classList.add('visible');
+            container.innerHTML = '';
+            quizMode = 'review';
+
+            questions.forEach((q, idx) => {
+                const ua = userAnswers[idx] || { selected: [], correct: q.correct, isCorrect: false };
+                const letters = ['A', 'B', 'C', 'D', 'E'];
+                const codeHtml = q.code ? `<div class="code-block">${highlightKotlin(q.code)}</div>` : '';
+                const typeBadge = {
+                    'SINGLE': '<span class="q-type-badge badge-single">Single Select</span>',
+                    'MULTI': '<span class="q-type-badge badge-multi">Multi Select</span>',
+                    'TF': '<span class="q-type-badge badge-tf">True / False</span>'
+                }[q.type] || '';
+
+                const optionsHtml = q.options.map((opt, i) => {
+                    const isCorrectOpt = ua.correct.includes(i);
+                    const isSelectedOpt = ua.selected.includes(i);
+                    let cls = '';
+                    if (isCorrectOpt && isSelectedOpt) cls = 'correct';
+                    else if (isCorrectOpt && !isSelectedOpt) cls = 'missed';
+                    else if (!isCorrectOpt && isSelectedOpt) cls = 'wrong';
+                    return `
+        <div class="option locked ${cls}">
+          <div class="option-letter">${q.type === 'TF' ? (i === 0 ? 'T' : 'F') : letters[i]}</div>
+          <div class="option-text">${opt}</div>
+        </div>`;
+                }).join('');
+
+                const resultIcon = ua.isCorrect ? '✓' : '✗';
+                const resultColor = ua.isCorrect ? 'var(--green)' : 'var(--red)';
+
+                container.innerHTML += `
+      <div class="question-card" style="border-color:${resultColor}22">
+        <div class="q-meta">
+          ${typeBadge}
+          <span class="q-topic">${q.topic || ''}</span>
+          <span style="margin-left:auto;font-family:JetBrains Mono,monospace;font-size:0.85rem;color:${resultColor};font-weight:700">${resultIcon} Q${idx + 1}</span>
+        </div>
+        <div class="q-text">${q.question.replace(/\n/g, '<br>')}</div>
+        ${codeHtml}
+        <div class="options">${optionsHtml}</div>
+        <div class="explanation visible" style="display:block;margin-top:1rem">
+          <strong>${ua.isCorrect ? '✓ Correct!' : '✗ Incorrect.'}</strong> ${q.explanation}
+        </div>
+      </div>`;
+            });
+
+            container.innerHTML += `<div style="text-align:center;padding:1rem"><button class="btn btn-primary" onclick="startQuiz()">New Quiz</button></div>`;
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // =============================================
+        // KOTLIN SYNTAX HIGHLIGHTING
+        // =============================================
+        function highlightKotlin(code) {
+            if (!code) return '';
+            let html = code
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            // annotations
+            html = html.replace(/(@\w+)/g, '<span class="an">$1</span>');
+            // strings
+            html = html.replace(/"([^"\\]|\\.)*"/g, m => `<span class="str">${m}</span>`);
+            // keywords
+            const kws = ['fun', 'class', 'interface', 'abstract', 'override', 'val', 'var', 'return', 'suspend', 'launch', 'async', 'await', 'if', 'else', 'when', 'null', 'true', 'false', 'companion', 'object', 'data', 'private', 'public', 'internal', 'override', 'open', 'sealed', 'enum', 'by', 'in', 'is', 'as', 'import', 'package', 'init', 'constructor', 'super', 'this', 'it'];
+            kws.forEach(kw => {
+                html = html.replace(new RegExp(`\\b(${kw})\\b`, 'g'), '<span class="kw">$1</span>');
+            });
+            // types (UpperCase words)
+            html = html.replace(/\b([A-Z][a-zA-Z0-9]+)\b/g, '<span class="tp">$1</span>');
+            // comments
+            html = html.replace(/(\/\/[^\n]*)/g, '<span class="cm">$1</span>');
+            // numbers
+            html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+
+            return html;
+        }
+
+        // Init
+        initCheatsheet();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "mad-quiz-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local proxy for secure quiz question generation",
+  "scripts": {
+    "start": "node quiz-proxy-server.js"
+  }
+}
