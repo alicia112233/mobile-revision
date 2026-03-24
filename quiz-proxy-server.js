@@ -131,7 +131,40 @@ function serveHtml(res) {
     res.end(html);
 }
 
+function getContentType(filePath) {
+    const ext = path.extname(filePath).toLowerCase();
+    if (ext === '.css') return 'text/css; charset=utf-8';
+    if (ext === '.js') return 'application/javascript; charset=utf-8';
+    if (ext === '.html') return 'text/html; charset=utf-8';
+    if (ext === '.json') return 'application/json; charset=utf-8';
+    if (ext === '.png') return 'image/png';
+    if (ext === '.jpg' || ext === '.jpeg') return 'image/jpeg';
+    if (ext === '.svg') return 'image/svg+xml';
+    if (ext === '.webp') return 'image/webp';
+    return 'application/octet-stream';
+}
+
+function serveStaticAsset(reqPath, res) {
+    const safePath = path.normalize(reqPath).replace(/^([.][.][\\/])+/, '');
+    const filePath = path.join(__dirname, safePath);
+
+    if (!filePath.startsWith(__dirname)) {
+        return sendJson(res, 403, { error: 'Forbidden path' });
+    }
+
+    if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+        return sendJson(res, 404, { error: 'Not found' });
+    }
+
+    const content = fs.readFileSync(filePath);
+    setCorsHeaders(res);
+    res.writeHead(200, { 'Content-Type': getContentType(filePath) });
+    res.end(content);
+}
+
 const server = http.createServer(async (req, res) => {
+    const pathname = decodeURIComponent((req.url || '/').split('?')[0]);
+
     if (req.method === 'OPTIONS') {
         setCorsHeaders(res);
         res.writeHead(204);
@@ -139,12 +172,17 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    if (req.method === 'GET' && (req.url === '/' || req.url === '/mobile-test.html')) {
+    if (req.method === 'GET' && (pathname === '/' || pathname === '/mobile-test.html')) {
         serveHtml(res);
         return;
     }
 
-    if (req.method === 'POST' && req.url === '/api/generate-questions') {
+    if (req.method === 'GET') {
+        serveStaticAsset(pathname.replace(/^\//, ''), res);
+        return;
+    }
+
+    if (req.method === 'POST' && pathname === '/api/generate-questions') {
         await handleGenerateQuestions(req, res);
         return;
     }
